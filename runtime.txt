@@ -1,0 +1,25 @@
+time ./p05 test a
+
+OUTPUT:
+0
+
+real	0m0.017s
+user	0m0.003s
+sys	0m0.009s
+
+time ./p05 test a --systemcalls
+0
+
+real	0m4.727s
+user	0m0.753s
+sys	0m3.970s
+
+
+The first result is using fread on the entire file and storing it in a buffer.
+
+The second result is using system calls and reading characters one by one and then storing them in a buffer.
+
+test is a 10M file (using mkfile 10m test, in Mac, so there are no garbage values, it's all 0s).
+
+The first result is significantly quicker because it is reading the whole file all at once, while the second result is using system calls and reading each character one at a time. Each time a character is read, there is an extra condition check and it is stored in buffer, then counter is incremented. This can cause a lot of delay, hence it is slower than fread.
+
